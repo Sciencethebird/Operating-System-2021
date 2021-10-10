@@ -2,13 +2,9 @@
 # include <stdlib.h>
 # include <sys/wait.h>
 # include "timer.h"
+# include "settings.h"
 
-# define RAND_SEED 69420
-# define ARRAY_SIZE 1000000000
-# define MAX_NUM 1000000
-# define COUNT_TARGET 6
 # define NUM_OF_CHILD 10
-
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 int count_element(int* a, int start, int end, int target){
@@ -26,7 +22,6 @@ int main(){
     int *a = malloc(ARRAY_SIZE * sizeof(int));
     for(i = 0; i< ARRAY_SIZE; i++)
         a[i] = rand() % MAX_NUM;
-
 
     /* timer start */
     printf("start counting...\n");
