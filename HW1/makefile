@@ -1,7 +1,12 @@
 all:
-	gcc -o main main.c
-run:
-	gcc -o main main.c
-	./main
+	gcc -o main-base main-base.c
+	gcc -o main-fork main-fork.c
+base:
+	gcc -o main-base main-base.c
+	./main-base
+fork:
+	gcc -o main-fork main-fork.c
+	./main-fork
 clean:
-	rm 2584
+	rm main-base
+	rm main-fork
