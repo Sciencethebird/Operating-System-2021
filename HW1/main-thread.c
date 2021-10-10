@@ -36,22 +36,21 @@ void* count_element(void* thrgs){
 int main() {
 
     /* generating a random array */
-    int i;
     srand(RAND_SEED);
     int *a = malloc(ARRAY_SIZE * sizeof(int));
-    for(i = 0; i< ARRAY_SIZE; i++)
+    for(int i = 0; i< ARRAY_SIZE; i++)
         a[i] = rand() % MAX_NUM;
 
     /* start counting */
     printf("start counting...\n");
     timer_start();
 
-    /* create threads */
+    /* create threads & execute */
     pthread_t t[NUM_OF_THREAD];
     int search_range = ARRAY_SIZE / NUM_OF_THREAD;
     int search_start = 0;
 
-    for(i = 0; i < NUM_OF_THREAD; i++){
+    for(int i = 0; i < NUM_OF_THREAD; i++){
         int upper_bound = MIN( (search_start + search_range), ARRAY_SIZE );
         thargs_t *args = init_args(a, search_start, upper_bound, COUNT_TARGET);
         pthread_create(&t[i], NULL, count_element, args);
@@ -60,7 +59,7 @@ int main() {
 
     /* collect results from threads */
     int total_count = 0;
-    for(i = 0; i < NUM_OF_THREAD; i++){
+    for(int i = 0; i < NUM_OF_THREAD; i++){
         void *ret;
         pthread_join(t[i], &ret); 
         int *count = (int *) ret;

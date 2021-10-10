@@ -17,10 +17,9 @@ int count_element(int* a, int start, int end, int target){
 int main(){
     
     /* generating a random array */
-    int i;
     srand(RAND_SEED);
     int *a = malloc(ARRAY_SIZE * sizeof(int));
-    for(i = 0; i< ARRAY_SIZE; i++)
+    for(int i = 0; i< ARRAY_SIZE; i++)
         a[i] = rand() % MAX_NUM;
 
     /* timer start */
@@ -33,7 +32,7 @@ int main(){
     int search_start = 0;
     
     /* Start children. */
-    for (i = 0; i < NUM_OF_CHILD; ++i) {
+    for (int i = 0; i < NUM_OF_CHILD; ++i) {
         if ( (pids[i] = fork()) < 0 ) {
             perror("fork");
             abort();
