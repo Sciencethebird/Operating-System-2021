@@ -38,7 +38,7 @@ int main(){
             abort();
         } else if ( pids[i] == 0 ) {
             int upper_bound = MIN( (search_start + search_range), ARRAY_SIZE );
-            unsigned long count = count_element(a, search_start, upper_bound, COUNT_TARGET);
+            int count = count_element(a, search_start, upper_bound, COUNT_TARGET);
             if(count > 255) printf("Over 255 counts in one process!!\n");
             exit(count); // terminate child process otherwise it'
         }
