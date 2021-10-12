@@ -50,8 +50,9 @@ int main(){
     pid_t pid;
     while (n > 0) {
       pid = wait(&status);
-      status = status >> 8; // exit info stored in upper 8 bit of status
-      total_count += status;
+      if( WIFEXITED(status))  total_count += WEXITSTATUS(status);
+      // status = status >> 8; // exit info stored in upper 8 bit of status
+      // total_count += status;
       --n; 
     }
 
