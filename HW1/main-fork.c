@@ -14,7 +14,28 @@ int count_element(int* a, int start, int end, int target){
     return count;
 }
 
-int main(){
+int main(int argc, char **argv){
+    
+    /* parse argument */
+    long long ARRAY_SIZE, MAX_NUM;
+    int cmd_opt = 0;
+
+    while(1) {
+        cmd_opt = getopt(argc, argv, "s:m:");
+        /* no more argument to parse */
+        if (cmd_opt == -1) break;
+        switch (cmd_opt) {
+            case 's':
+                ARRAY_SIZE = atoll(optarg);
+                break;
+            case 'm':
+                MAX_NUM = atoll(optarg);
+                break;
+            default:
+                fprintf(stderr, "Not supported option\n");
+                break;
+        }
+    }
     
     /* generating a random array */
     srand(RAND_SEED);

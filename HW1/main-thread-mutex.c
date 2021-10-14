@@ -8,6 +8,9 @@
 # define NUM_OF_THREAD 10
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
 
+int counter;
+pthread_mutex_t lock;
+
 typedef struct thread_arguments {
     int *a;
     int start;
@@ -27,10 +30,12 @@ thargs_t* init_args(int *a, int start, int end, int target){
 void* count_element(void* thrgs){
     int i;
     thargs_t *arg = (thargs_t *) thrgs;
-    int * count = malloc(sizeof(int));
     for(i = arg->start; i< arg->end; i++)
-        if(arg->a[i] == arg->target) (*count)++;
-    pthread_exit((void *) count);
+        if(arg->a[i] == arg->target){
+            pthread_mutex_lock(&lock);
+            counter++;
+            pthread_mutex_unlock(&lock);
+        }
 }
 
 int main(int argc, char **argv){
@@ -79,18 +84,14 @@ int main(int argc, char **argv){
     }
 
     /* collect results from threads */
-    int total_count = 0;
-    for(int i = 0; i < NUM_OF_THREAD; i++){
-        void *ret;
-        pthread_join(t[i], &ret); 
-        int *count = (int *) ret;
-        total_count += (*count);
-    }
+    for(int i = 0; i < NUM_OF_THREAD; i++) pthread_join(t[i], NULL); 
+
+    
 
     /* timer stop */
     unsigned long diff = timer_stop();
 
-    printf("Integer %d occurs %d times in the array.\n", COUNT_TARGET, total_count);
+    printf("Integer %d occurs %d times in the array.\n", COUNT_TARGET, counter);
     printf("Execution time %lu us\n\n", diff);
     
     free(a);
