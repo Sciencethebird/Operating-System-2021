@@ -5,10 +5,9 @@
 # include "timer.h"
 # include "settings.h"
 
-# define NUM_OF_THREAD 10
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
 
-int counter;
+int total_count;
 pthread_mutex_t lock;
 
 typedef struct thread_arguments {
@@ -33,7 +32,7 @@ void* count_element(void* thrgs){
     for(i = arg->start; i< arg->end; i++)
         if(arg->a[i] == arg->target){
             pthread_mutex_lock(&lock);
-            counter++;
+            total_count++;
             pthread_mutex_unlock(&lock);
         }
 }
@@ -41,11 +40,11 @@ void* count_element(void* thrgs){
 int main(int argc, char **argv){
     
     /* parse argument */
-    long long ARRAY_SIZE, MAX_NUM;
-    int cmd_opt = 0;
+    long long ARRAY_SIZE, MAX_NUM, NUM_OF_THREAD;
+    int cmd_opt = 0, hide = 0, iter = 0;
 
     while(1) {
-        cmd_opt = getopt(argc, argv, "s:m:");
+        cmd_opt = getopt(argc, argv, "s:m:n:i:h");
         /* no more argument to parse */
         if (cmd_opt == -1) break;
         switch (cmd_opt) {
@@ -55,12 +54,21 @@ int main(int argc, char **argv){
             case 'm':
                 MAX_NUM = atoll(optarg);
                 break;
+            case 'h':
+                hide = 1;
+                break;
+            case 'n':
+                NUM_OF_THREAD = atoll(optarg);
+                break;
+            case 'i':
+                iter = atoi(optarg);
+                break;
             default:
                 fprintf(stderr, "Not supported option\n");
                 break;
         }
     }
-
+    
     /* generating a random array */
     srand(RAND_SEED);
     int *a = malloc(ARRAY_SIZE * sizeof(int));
@@ -68,31 +76,38 @@ int main(int argc, char **argv){
         a[i] = rand() % MAX_NUM;
 
     /* start counting */
-    printf("start counting...\n");
-    timer_start();
+    if(hide == 0) printf("start counting...\n");
 
-    /* create threads & execute */
-    pthread_t t[NUM_OF_THREAD];
-    int search_range = ARRAY_SIZE / NUM_OF_THREAD;
-    int search_start = 0;
+    for(int n = 0; n < iter; n++){
+        total_count = 0;
+        timer_start();
 
-    for(int i = 0; i < NUM_OF_THREAD; i++){
-        int upper_bound = MIN( (search_start + search_range), ARRAY_SIZE );
-        thargs_t *args = init_args(a, search_start, upper_bound, COUNT_TARGET);
-        pthread_create(&t[i], NULL, count_element, args);
-        search_start += search_range;
+        /* create threads & execute */
+        pthread_t t[NUM_OF_THREAD];
+        int search_range = ARRAY_SIZE / NUM_OF_THREAD;
+        int search_start = 0;
+
+        for(int i = 0; i < NUM_OF_THREAD; i++){
+            int upper_bound = MIN( (search_start + search_range), ARRAY_SIZE );
+            thargs_t *args = init_args(a, search_start, upper_bound, COUNT_TARGET);
+            pthread_create(&t[i], NULL, count_element, args);
+            search_start += search_range;
+        }
+
+        /* collect results from threads */
+        for(int i = 0; i < NUM_OF_THREAD; i++) pthread_join(t[i], NULL); 
+
+        /* timer stop */
+        unsigned long diff = timer_stop();
+
+        if(hide){
+            printf("%lld, %d, %lu, ", ARRAY_SIZE, total_count, diff);
+        }else{
+            printf("Integer %d occurs %d times in the array.\n", COUNT_TARGET, total_count);
+            printf("Execution time %lu us\n", diff);
+        }
     }
-
-    /* collect results from threads */
-    for(int i = 0; i < NUM_OF_THREAD; i++) pthread_join(t[i], NULL); 
-
-    
-
-    /* timer stop */
-    unsigned long diff = timer_stop();
-
-    printf("Integer %d occurs %d times in the array.\n", COUNT_TARGET, counter);
-    printf("Execution time %lu us\n\n", diff);
+    printf("\n");
     
     free(a);
     return 0;
