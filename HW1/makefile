@@ -19,7 +19,7 @@ thread-mutex:
 plot: 
 	python3 plot_result.py
 clean:
-	rm main-base
-	rm main-fork
-	rm main-thread
-	rm main-thread-mutex
+	rm main-base main-base-result.txt
+	rm main-fork main-fork-result.txt
+	rm main-thread main-thread-result.txt
+	rm main-thread-mutex main-thread-mutex-result.txt
