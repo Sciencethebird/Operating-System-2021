@@ -7,9 +7,9 @@ result_files = ["main-base-result.txt",
                 "main-thread-mutex-result.txt" ]
 tags = [ "single-process", "multi-process", "multi-thread"]
 
-#result_files = ["main-thread-result.txt",
-#                "main-thread-mutex-result.txt" ]
-#tags = [ "multi-thread", "multi-thread w/ mutex"]
+result_files = ["main-thread-result.txt",
+                "main-thread-mutex-result.txt" ]
+tags = [ "multi-thread", "multi-thread w/ mutex"]
 
 size_results = {}
 count_results = {}

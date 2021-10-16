@@ -27,17 +27,17 @@ make all
 > main-thread-result.txt
 > main-thread-mutex-result.txt
 
-# process-num-comparison
-array_size=10000000
-for (( i=${p_start}; i<=${p_end}; i+=1 )); do
-
-    echo "array size: 10000000, max num: 100"
-    ./main-base -s ${array_size} -m 100000 -i 5 -h >> main-base-result.txt
-    echo "running fork..."
-    ./main-fork -s ${array_size} -m 100000 -n ${i} -i 5 -h >> main-fork-result.txt
-    echo "running mutex..."
-    ./main-thread-mutex -s ${array_size} -m 100000 -n ${i} -i 5 -h >> main-thread-mutex-result.txt
-done
+## process-num-comparison
+#array_size=10000000
+#for (( i=${p_start}; i<=${p_end}; i+=1 )); do
+#
+#    echo "array size: 10000000, max num: 100"
+#    ./main-base -s ${array_size} -m 100000 -i 5 -h >> main-base-result.txt
+#    echo "running fork..."
+#    ./main-fork -s ${array_size} -m 100000 -n ${i} -i 5 -h >> main-fork-result.txt
+#    echo "running mutex..."
+#    ./main-thread-mutex -s ${array_size} -m 100000 -n ${i} -i 5 -h >> main-thread-mutex-result.txt
+#done
 
 ## data-size-comparison
 #process_num=16
@@ -64,11 +64,11 @@ done
 #done
 
 
-## mutex comparison
-#array_size=1000000
-#for (( i=${p_start}; i<=${p_end}; i+=1 )); do
-#    echo "running thread-mutex..."
-#    ./main-thread-mutex -s ${array_size} -m 2 -n ${i} -i 2 -h >> main-thread-mutex-result.txt
-#    echo "running thread"
-#     ./main-thread -s ${array_size} -m 2 -n ${i} -i 2 -h >> main-thread-result.txt
-#done
+# mutex comparison
+array_size=1000000
+for (( i=${p_start}; i<=${p_end}; i+=1 )); do
+    echo "running thread-mutex..."
+    ./main-thread-mutex -s ${array_size} -m 2 -n ${i} -i 5 -h >> main-thread-mutex-result.txt
+    echo "running thread"
+     ./main-thread -s ${array_size} -m 2 -n ${i} -i 5 -h >> main-thread-result.txt
+done
