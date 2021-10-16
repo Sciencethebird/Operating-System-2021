@@ -80,13 +80,12 @@ int main(int argc, char **argv){
 
     for(int n = 0; n < iter; n++){
         total_count = 0;
-        timer_start();
-
         /* create threads & execute */
         pthread_t t[NUM_OF_THREAD];
         int search_range = ARRAY_SIZE / NUM_OF_THREAD;
         int search_start = 0;
 
+        timer_start();
         for(int i = 0; i < NUM_OF_THREAD; i++){
             int upper_bound = MIN( (search_start + search_range), ARRAY_SIZE );
             thargs_t *args = init_args(a, search_start, upper_bound, COUNT_TARGET);
@@ -101,7 +100,7 @@ int main(int argc, char **argv){
         unsigned long diff = timer_stop();
 
         if(hide){
-            printf("%lld, %d, %lu, ", ARRAY_SIZE, total_count, diff);
+            printf("%lld, %d, %lu, ", NUM_OF_THREAD, total_count, diff);
         }else{
             printf("Integer %d occurs %d times in the array.\n", COUNT_TARGET, total_count);
             printf("Execution time %lu us\n", diff);

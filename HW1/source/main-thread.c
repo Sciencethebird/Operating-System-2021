@@ -63,29 +63,6 @@ int main(int argc, char **argv){
                 break;
         }
     }
-    
-    while(1) {
-        cmd_opt = getopt(argc, argv, "s:m:n:h");
-        /* no more argument to parse */
-        if (cmd_opt == -1) break;
-        switch (cmd_opt) {
-            case 's':
-                ARRAY_SIZE = atoll(optarg);
-                break;
-            case 'm':
-                MAX_NUM = atoll(optarg);
-                break;
-            case 'h':
-                hide = 1;
-                break;
-            case 'n':
-                NUM_OF_THREAD = atoll(optarg);
-                break;
-            default:
-                fprintf(stderr, "Not supported option\n");
-                break;
-        }
-    }
 
     /* generating a random array */
     srand(RAND_SEED);
@@ -95,9 +72,10 @@ int main(int argc, char **argv){
 
     /* start counting */
     if(hide == 0) printf("start counting...\n");
-    timer_start();
+   
     for(int n = 0; n < iter; n++){
-            /* create threads & execute */
+        timer_start();
+        /* create threads & execute */
         pthread_t t[NUM_OF_THREAD];
         int search_range = ARRAY_SIZE / NUM_OF_THREAD;
         int search_start = 0;

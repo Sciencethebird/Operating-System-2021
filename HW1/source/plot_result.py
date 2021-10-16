@@ -56,9 +56,9 @@ for file in result_files:
 fig, (ax1, ax2) = plt.subplots(1, 2)
 for i, file in enumerate(result_files): 
     print(count_results)      
-    ax1.plot(size_results["main-fork-result.txt"], count_results[file], label = tags[i], zorder=10)
-    #ax1.errorbar(size_results["main-thread-result.txt"], time_results[file], time_error[file], linestyle='None', marker='^')
-    log_size = [math.log(x, 10) for x in size_results["main-fork-result.txt"] ]
+    ax1.plot(size_results["main-thread-mutex-result.txt"], time_results[file], label = tags[i], zorder=10)
+    ax1.errorbar(size_results["main-thread-mutex-result.txt"], time_results[file], time_error[file], linestyle='None', marker='^')
+    log_size = [math.log(x, 10) for x in size_results["main-thread-mutex-result.txt"] ]
     log_time = log_time_results[file]
     log_error = log_time_error[file]
     ax2.plot(log_size, log_time, label = tags[i], zorder=10)
